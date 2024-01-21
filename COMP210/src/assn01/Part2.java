@@ -8,7 +8,7 @@ public class Part2 {
 
     public static void method2(){
         int n2 = 0xABC;
-        System.out.println("2748");
+        System.out.println(n2);
         method3();
     }
 
