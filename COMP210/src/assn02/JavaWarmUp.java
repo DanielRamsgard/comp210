@@ -73,21 +73,49 @@ public class JavaWarmUp {
 
 		// TODO: for each item i, incrementally total the values in the above arrays
         for (int i = 0; i < n; i++) {
-            int catIndex = 0;
-            // set the value of catIndex for each i to be such that category[i] == categoriesList[catIndex]
+            // set the value of catIndex for each i to be such that category[i] == categoriesList[catIndex
             // TODO: Your code for setting catIndex here
+            for (int catIndex = 0; catIndex < categoriesList.length; catIndex++){
+                if (category[i].equals(categoriesList[catIndex])){
 
-            numOfBatchesC[catIndex]++;
+                    numOfBatchesC[catIndex]++;
+                }
+
+            }
+
             // TODO: fill in rest of the Category arrays here
+            // total all others
+            for (int j = 0; j < categoriesList.length; j++){
+                if (category[i].equals(categoriesList[j])){
+                    // total fee
+                    totFeeC[j] += fee[i]*quantity[i];
+                    // total quantity
+                    totQuantityC[j] += quantity[i];
+                    // labor cost
+                    totLaborCostC[j] += time2[i]*16;
+                    // assembly cost
+                    totAsmCostC[j] += asmCost[i];
+                }
+            }
 
         }
 
 		// TODO: Calculate & Print Category-wise Statistics
         for (int j = 0; j < categoriesList.length; j++) {
             if (numOfBatchesC[j] > 0) {
-                System.out.println( categoriesList[j]);
+                System.out.println(categoriesList[j]);
                 // TODO: print the remaining stats
 
+                // total quantity
+                System.out.println(totQuantityC[j]);
+
+                // weighted average part
+                double val = totFeeC[j]/totQuantityC[j];
+                System.out.println(val);
+
+                // net profit calculation
+                double netProfit = (totFeeC[j] - totLaborCostC[j] - totAsmCostC[j])/totQuantityC[j];
+                System.out.println(netProfit);
             }
         }
     }
