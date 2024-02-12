@@ -10,7 +10,6 @@ public class JavaWarmUp {
 
         String[] categoriesList = {"phone", "laptop", "smart_watch"};
 
-        System.out.println("Input number of items:");
         int n = s.nextInt();
         // Date Time1 Category Fee Quantity Time2 AsmCost
 
@@ -25,19 +24,12 @@ public class JavaWarmUp {
 
 		// TODO: Fill in the above arrays with data entered from the console.
         for (int i = 0; i < n; i++) {
-            System.out.println("Input date:");
             date[i] = s.next();
-            System.out.println("Input time1:");
             time1[i] = s.next();
-            System.out.println("Input category:");
             category[i] = s.next();
-            System.out.println("Input fee:");
             fee[i] = s.nextDouble();
-            System.out.println("Input quantity:");
             quantity[i] = s.nextInt();
-            System.out.println("Input time2:");
             time2[i] = s.nextDouble();
-            System.out.println("Input asmCost:");
             asmCost[i] = s.nextDouble();
 
         }
@@ -109,13 +101,13 @@ public class JavaWarmUp {
                 // total quantity
                 System.out.println(totQuantityC[j]);
 
-                // weighted average part
-                double val = totFeeC[j]/totQuantityC[j];
-                System.out.println(val);
+                // weighted average fee
+                double weightedFee = totFeeC[j]/totQuantityC[j];
+                System.out.printf("%.2f\n",weightedFee);
 
                 // net profit calculation
                 double netProfit = (totFeeC[j] - totLaborCostC[j] - totAsmCostC[j])/totQuantityC[j];
-                System.out.println(netProfit);
+                System.out.printf("%.2f\n",netProfit);
             }
         }
     }
