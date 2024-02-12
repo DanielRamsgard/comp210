@@ -24,12 +24,19 @@ public class LinkedList<T> {
         if (i > size - 1){
             throw new IndexOutOfBoundsException();
         }
+        if (i == 0){
+            head = current.getNext();
+            return;
+        }
         for (int j = 0;j < i; j++){
             if (j == i-1){
                 Node<T> skip = current.getNext().getNext();
                 current.setNext(skip);
             }
             current = current.getNext();
+            if (current == null){
+                return;
+            }
         }
     }
 
@@ -54,15 +61,15 @@ public class LinkedList<T> {
     public boolean isEqual(LinkedList list2) {
         Node<T> current = head;
         Node<T> currentTwo = list2.head;
-        if (size != list2.size()){
-            return false;
-        }
-        for (int i = 0; i < size; i++){
+        for (int i = 0; i < size; i++) {
             if (current.getValue() != currentTwo.getValue()) {
                 return false;
             }
-            current.getNext();
-            currentTwo.getNext();
+            if (current.getNext() == null || currentTwo.getNext() == null) {
+                return true;
+            }
+            current = current.getNext();
+            currentTwo = currentTwo.getNext();
 
         }
         return true;
@@ -78,25 +85,16 @@ public class LinkedList<T> {
      *
      */
     public void removeRepeats() {
-        Object[] countArray = new Object[size];
         Node<T> current = head;
         for (int i = 0; i < size; i++){
-            for (int j = 0; j < size; j++){
-                if (current.getValue() == countArray[j]){
-                    removeAtIndex(i);
-                    break;
-                }
-                if (j == size-1){
-                    for (int k = 0; k < size; k++){
-                        if (countArray[k] == null) {
-                            countArray[k] = current.getValue();
-                        }
-                    }
-                }
+            if (current.getNext() == null){
+                return;
             }
-            current.getNext();
+            if (current.getValue() == current.getNext().getValue()){
+                removeAtIndex(i);
+            }
+            current = current.getNext();
         }
-
 
     }
 
@@ -112,22 +110,24 @@ public class LinkedList<T> {
      *
      */
     public void reverse() {
-        LinkedList<T> duplicateList = new LinkedList<T>();
-        duplicateList.head = head;
-        duplicateList.size = size;
-        duplicateList.tail = tail;
         Object[] valueArray = new Object[size];
         Node<T> current = head;
+        int i = 0;
 
-        for (int i = 0; i < size; i++){
+        while (current != null){
             valueArray[i] = current.getValue();
-            current.getNext();
+            current = current.getNext();
+            i++;
         }
+
         current = head;
-        for (int j = size-1; j > 0; j--){
-            T val = (T) valueArray[j];
+        for (int k = size-1; k >= 0; k--) {
+            T val = (T) valueArray[k];
             current.setValue(val);
             current = current.getNext();
+            if (current == null){
+                break;
+            }
         }
     }
 
@@ -156,15 +156,16 @@ public class LinkedList<T> {
     public void merge(LinkedList list2) {
         Node<T> current = head;
         Node<T> currentTwo = list2.head;
+        Node<T> currentThree;
 
-        for (int i = 0; i < size; i++){
+        for (int i = 0; i < 1; i++){
+            currentThree = current.getNext();
             current.setNext(currentTwo);
-            currentTwo.setNext(current.getNext());
-            current = current.getNext();
+            current.getNext().setNext(currentThree);
+
+            current = current.getNext().getNext();
             currentTwo = currentTwo.getNext();
-            if (currentTwo == null){
-                return;
-            }
+
         }
     }
 
