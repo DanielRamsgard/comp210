@@ -158,9 +158,12 @@ public class LinkedList<T> {
         Node<T> currentTwo = list2.head;
         Node<T> currentThree;
 
-        for (int i = 0; i < 1; i++){
+        for (int i = 0; i < list2.size; i++){
+            T val = currentTwo.getValue();
+            NodeImpl<T> node = new NodeImpl<T>(val, null);
+
             currentThree = current.getNext();
-            current.setNext(currentTwo);
+            current.setNext(node);
             current.getNext().setNext(currentThree);
 
             current = current.getNext().getNext();
