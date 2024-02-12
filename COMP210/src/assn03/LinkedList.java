@@ -61,6 +61,12 @@ public class LinkedList<T> {
     public boolean isEqual(LinkedList list2) {
         Node<T> current = head;
         Node<T> currentTwo = list2.head;
+        if (size == 0 || list2.size == 0){
+            if (size == 0 && list2.size == 0){
+                return true;
+            }
+            return false;
+        }
         for (int i = 0; i < size; i++) {
             if (current.getValue() != currentTwo.getValue()) {
                 return false;
