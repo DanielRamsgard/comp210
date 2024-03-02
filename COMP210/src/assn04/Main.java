@@ -13,8 +13,13 @@ public class Main {
       bst = bst.insert(4);
       bst = bst.insert(5);
       bst = bst.insert(6);
-      bst.printPreOrderTraversal();
-
+    bst = bst.insert(20);
+    bst = bst.insert(50);
+    bst = bst.insert(30);
+    bst = bst.insert(15);
+    bst = bst.insert(11);
+    bst.remove(6);
+    bst.printPostOrderTraversal();
   }
 
 }

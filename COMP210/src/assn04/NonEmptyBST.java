@@ -1,4 +1,5 @@
 package assn04;
+import javax.sound.midi.SysexMessage;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -16,46 +17,58 @@ public class NonEmptyBST<T extends Comparable<T>> implements BST<T> {
 	// TODO: insert
 	@Override
 	public BST<T> insert(T element) {
-		int val = getElement().compareTo(element);
-		int inp_lower = 1; // n is _element > element
-		int inp_higher = -1;
-		System.out.println(val);
+		int comparison = getElement().compareTo(element);
 
-		if (this.isEmpty()) {
-			return new NonEmptyBST<T>(element);
-		}
-		if (val == 0) {
-			return this;
-		}
-		else if (val == inp_lower) {
-			if (getLeft().isEmpty()) {
-				_left = new NonEmptyBST<>(element);
-				return this;
-			} else {
-				return _left.insert(element);
-			}
-		} else if (val == inp_higher) {
-			System.out.println("yo");
-			if (getRight().isEmpty()) {
-				_right = new NonEmptyBST<>(element);
-				return this;
-			} else {
-				return _right.insert(element);
-			}
+		if (comparison > 0){
+			_left = _left.insert(element);
+		} else if (comparison < 0){
+			_right = _right.insert(element);
+
 		}
 		return this;
 	}
+
 	
 	// TODO: remove
 	@Override
 	public BST<T> remove(T element) {
-		return null;
+		int comparison = getElement().compareTo(element);
+
+		if (comparison > 0){
+			_left = _left.remove(element);
+		} else if (comparison < 0){
+			_right = _right.remove(element);
+
+		}
+		// remove block
+		if (comparison == 0){
+			// if remove node has no children
+			if (_left.isEmpty() && _right.isEmpty()){
+				return new EmptyBST<>();
+			}
+			// if remove node has one child
+			else if (_left.isEmpty()){
+				return _right;
+			}
+			// if remove node has one child and opposite side of previous case
+			else if (_right.isEmpty()){
+				return _left;
+			}
+			// if remove node has two children, a subtree, go right once then go left until empty BST
+			else{
+
+				T smallestOnRight = _right.findMin(); // I now find the min value on the right tree of current
+				setElement(smallestOnRight); // now we are setting the current element for the current node to be the smallest
+				_right = _right.remove(smallestOnRight); // remove until complete
+			}
+		}
+		return this; // ensures that parent nodes have the update that I made above in the remove block
 	}
 	
 	// TODO: remove all in range (inclusive)
 	@Override
 	public BST<T> remove_range(T start, T end) {
-		return null;
+		return this;
 	}
 
 	// TODO: printPreOrderTraversal
@@ -65,15 +78,14 @@ public class NonEmptyBST<T extends Comparable<T>> implements BST<T> {
 		if (!_left.isEmpty()){
 			_left.printPreOrderTraversal();
 		}
-		if (_left.isEmpty()){
 
-			if (!_right.isEmpty()){
+		if (!_right.isEmpty()){
 			_right.printPreOrderTraversal();
-			}
-			if (_right.isEmpty()){
-				return;
-			}
 		}
+		if (_right.isEmpty()){
+			return;
+		}
+
 
 	}
 
@@ -81,19 +93,14 @@ public class NonEmptyBST<T extends Comparable<T>> implements BST<T> {
 	@Override
 	public void printPostOrderTraversal() {
 		if (!_left.isEmpty()){
-			_left.printPreOrderTraversal();
-			System.out.print(this.getElement() + " "); // print current
+			_left.printPostOrderTraversal();
 		}
-		if (_left.isEmpty()){
 
-			if (!_right.isEmpty()){
-				System.out.print(this.getElement() + " "); // print current
-				_right.printPreOrderTraversal();
-			}
-			if (_right.isEmpty()){
-				return;
-			}
+		if (!_right.isEmpty()){
+			_right.printPostOrderTraversal();
 		}
+
+		System.out.print(_element.toString() + " "); // print current;
 	}
 
 	// The findMin method returns the minimum value in the tree.
@@ -104,6 +111,11 @@ public class NonEmptyBST<T extends Comparable<T>> implements BST<T> {
 		}
 		return _left.findMin();
 	}
+
+	public void setElement(T element){
+		_element = element;
+	}
+
 
 	@Override
 	public int getHeight() {
