@@ -70,20 +70,37 @@ public class NonEmptyBST<T extends Comparable<T>> implements BST<T> {
 	public BST<T> remove_range(T start, T end) {
 		int comparisonStart = start.compareTo(_element);
 		int comparisonEnd = end.compareTo(_element);
+		int comparisonBoth = start.compareTo(end);
 
-		// this means we take into account if range is one value and remove if we have requirements for deletion
-		if (comparisonStart <= 0 && comparisonEnd >= 0){
-			remove(_element);
+		// if start < end
+		if (comparisonBoth < 0){
+			T copy = start;
+			start = end;
+			end = copy;
+			comparisonStart = start.compareTo(_element);
+			comparisonEnd = end.compareTo(_element);
+			comparisonBoth = start.compareTo(end);
+			System.out.println("not working");
+
+
 		}
 
-		// if end is smallest and end is bigger than element then we have to go right
-		else if (comparisonEnd > 0){
-			_right = _right.remove_range(start, end);
+		// if there is no range
+		if (comparisonBoth == 0){
+			return remove(start);
 		}
 
-		// if the start is biggest and element is bigger we have to go left by BST
-		else if (comparisonStart < 0){
+		// if start > end
+		if (comparisonBoth > 0){
+			// go left and right and remove_range()
 			_left = _left.remove_range(start, end);
+			_right = _right.remove_range(start, end);
+
+			// check if we're in the range then remove
+			if (comparisonStart >= 0 && comparisonEnd <= 0){
+				return remove(_element);
+			}
+
 		}
 
 			return this;
