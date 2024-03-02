@@ -68,20 +68,43 @@ public class NonEmptyBST<T extends Comparable<T>> implements BST<T> {
 	// TODO: remove all in range (inclusive)
 	@Override
 	public BST<T> remove_range(T start, T end) {
-		return this;
+		int comparisonStart = start.compareTo(_element);
+		int comparisonEnd = end.compareTo(_element);
+
+		// this means we take into account if range is one value and remove if we have requirements for deletion
+		if (comparisonStart <= 0 && comparisonEnd >= 0){
+			remove(_element);
+		}
+
+		// if end is smallest and end is bigger than element then we have to go right
+		else if (comparisonEnd > 0){
+			_right = _right.remove_range(start, end);
+		}
+
+		// if the start is biggest and element is bigger we have to go left by BST
+		else if (comparisonStart < 0){
+			_left = _left.remove_range(start, end);
+		}
+
+			return this;
 	}
 
 	// TODO: printPreOrderTraversal
 	@Override
 	public void printPreOrderTraversal() {
 		System.out.print(_element.toString() + " "); // print current
+
+		// go left according to function desired function
 		if (!_left.isEmpty()){
 			_left.printPreOrderTraversal();
 		}
 
+		// we have to go right if we are at this code block
 		if (!_right.isEmpty()){
 			_right.printPreOrderTraversal();
 		}
+
+		// we've gone through the entire subtree
 		if (_right.isEmpty()){
 			return;
 		}
@@ -92,14 +115,17 @@ public class NonEmptyBST<T extends Comparable<T>> implements BST<T> {
 	// TODO: printPostOrderTraversal
 	@Override
 	public void printPostOrderTraversal() {
+		// don't print yet just traverse the left tree
 		if (!_left.isEmpty()){
 			_left.printPostOrderTraversal();
 		}
 
+		// traverse the right after traversing the left
 		if (!_right.isEmpty()){
 			_right.printPostOrderTraversal();
 		}
 
+		// finally print the element
 		System.out.print(_element.toString() + " "); // print current;
 	}
 

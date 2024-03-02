@@ -18,7 +18,7 @@ public class Main {
     bst = bst.insert(30);
     bst = bst.insert(15);
     bst = bst.insert(11);
-    bst.remove(6);
+    bst.remove_range(6, 10);
     bst.printPostOrderTraversal();
   }
 
