@@ -45,7 +45,31 @@ public class MaxBinHeapER  <V, P extends Comparable<P>> implements BinaryHeap<V,
     }
 
     public void bubbleDown(){
+        int i = 0;
 
+        if (_heap.get(getLeftChild(i)) == null && _heap.get(getRightChild(i)) == null){
+            return;
+        }
+
+        while (_heap.get(getLeftChild(i)).getPriority().compareTo(_heap.get(i).getPriority()) > 0 || _heap.get(getRightChild(i)).getPriority().compareTo(_heap.get(i).getPriority()) > 0){
+
+            if (_heap.get(getRightChild(i)).getPriority().compareTo(_heap.get(getLeftChild(i)).getPriority()) > 0){
+                Prioritized temp = _heap.get(i);
+                _heap.set(i, _heap.get(getRightChild(i)));
+                _heap.set(getRightChild(i), temp);
+                i = getRightChild(i);
+            }
+            else{
+                Prioritized temp = _heap.get(i);
+                _heap.set(i, _heap.get(getLeftChild(i)));
+                _heap.set(getLeftChild(i), temp);
+                i = getLeftChild(i);
+            }
+
+            if(_heap.get(getLeftChild(i)) == null || _heap.get(getRightChild(i)) == null){
+                return;
+            }
+        }
     }
 
 
@@ -72,6 +96,7 @@ public class MaxBinHeapER  <V, P extends Comparable<P>> implements BinaryHeap<V,
         }
         V val = _heap.get(0).getValue();
         _heap.set(0, _heap.get(size()-1));
+        _heap.set(size()-1, null);
         bubbleDown();
         return val;
     }
@@ -82,7 +107,15 @@ public class MaxBinHeapER  <V, P extends Comparable<P>> implements BinaryHeap<V,
         if (size() == 0){
             return null;
         }
-    	 return null;
+        Prioritized[] array = getAsArray();
+        Prioritized max = array[0];
+
+        for (int i = 0; i < array.length; i++){
+            if (array[i].compareTo(max) > 0){
+                max = array[i];
+            }
+        }
+        return (V) max.getValue();
     }
 
     // TODO (part 2B) : updatePriority

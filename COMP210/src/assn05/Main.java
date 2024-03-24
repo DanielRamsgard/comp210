@@ -8,18 +8,19 @@ public class Main {
 
     public static void main(String[] args) {
         MaxBinHeapER room = new MaxBinHeapER();
-        room.enqueue(5);
-        room.enqueue(6);
-        room.enqueue(7);
+        room.enqueue(1);
+        room.enqueue(1);
 
-        room.enqueue(5);
+        room.enqueue(1);
+        room.enqueue(1);
         room.enqueue(6);
-        room.enqueue(7);
-        room.enqueue(7);
+        room.enqueue(5);
+
 //        testP1(room);
         testP2(room);
-////        testP3();
-//        testP4();
+  //      room.dequeue();
+        testP3(room);
+        testP4(room);
     }
 
     // test Part 1
@@ -53,22 +54,24 @@ public class Main {
     /*
     Part 3
      */
-    public static void testP3(){
-        MaxBinHeapER transfer = new MaxBinHeapER(makePatients());
-        Prioritized[] arr = transfer.getAsArray();
-        for(int i = 0; i < transfer.size(); i++) {
-            System.out.println("Value: " + arr[i].getValue()
-                    + ", Priority: " + arr[i].getPriority());
+    public static void testP3(MaxBinHeapER heap){
+        System.out.println("Size: "+heap.size());
+
+        Prioritized[] array = heap.getAsArray();
+        for (int i = 0; i < heap.size(); i++){
+            if (array[i] == null){
+                return;
+            }
+            System.out.println("Value: "+array[i].getValue()+" Priority: "+array[i].getPriority());
         }
+
     }
 
     /*
     Part 4
      */
-    public static void testP4() {
-               /*
-        Part 4 - Write some tests to convince yourself that your code for Part 4 is working
-         */
+    public static void testP4(MaxBinHeapER heap) {
+        System.out.println(heap.getMax());
 
     }
 
