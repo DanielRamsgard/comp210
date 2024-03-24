@@ -1,5 +1,6 @@
 package assn05;
 
+import java.awt.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,32 +45,30 @@ public class MaxBinHeapER  <V, P extends Comparable<P>> implements BinaryHeap<V,
         return _heap.size();
     }
 
-    public void bubbleDown(){
-        int i = 0;
+    public void bubbleDown(int i) {
+        int left = getLeftChild(i);
+        int right = getRightChild(i);
+        int smallestIndex = i;
 
-        if (_heap.get(getLeftChild(i)) == null && _heap.get(getRightChild(i)) == null){
-            return;
+        if (left < _heap.size() && _heap.get(left).getPriority().compareTo(_heap.get(smallestIndex).getPriority()) > 0){
+            smallestIndex = left;
         }
 
-        while (_heap.get(getLeftChild(i)).getPriority().compareTo(_heap.get(i).getPriority()) > 0 || _heap.get(getRightChild(i)).getPriority().compareTo(_heap.get(i).getPriority()) > 0){
-
-            if (_heap.get(getRightChild(i)).getPriority().compareTo(_heap.get(getLeftChild(i)).getPriority()) > 0){
-                Prioritized temp = _heap.get(i);
-                _heap.set(i, _heap.get(getRightChild(i)));
-                _heap.set(getRightChild(i), temp);
-                i = getRightChild(i);
-            }
-            else{
-                Prioritized temp = _heap.get(i);
-                _heap.set(i, _heap.get(getLeftChild(i)));
-                _heap.set(getLeftChild(i), temp);
-                i = getLeftChild(i);
-            }
-
-            if(_heap.get(getLeftChild(i)) == null || _heap.get(getRightChild(i)) == null){
-                return;
-            }
+        if (right < _heap.size() && _heap.get(right).getPriority().compareTo(_heap.get(smallestIndex).getPriority()) > 0){
+            smallestIndex = right;
         }
+
+        if (smallestIndex != i){
+            swapNodes(i, smallestIndex);
+            bubbleDown(smallestIndex);
+        }
+
+    }
+
+    public void swapNodes(int i, int smallestIndex){
+        Prioritized temp = _heap.get(smallestIndex);
+        _heap.set(smallestIndex, _heap.get(i));
+        _heap.set(i, temp);
     }
 
 
@@ -94,39 +93,68 @@ public class MaxBinHeapER  <V, P extends Comparable<P>> implements BinaryHeap<V,
         if (size() == 0){
             return null;
         }
+        if (size() == 1){
+            V val = _heap.get(0).getValue();
+            _heap.remove(size()-1);
+            return val;
+        }
+
         V val = _heap.get(0).getValue();
         _heap.set(0, _heap.get(size()-1));
-        _heap.set(size()-1, null);
-        bubbleDown();
+        _heap.remove(size()-1);
+        bubbleDown(0);
         return val;
     }
 
     // TODO (Task 2A): getMax
     @Override
     public V getMax() {
-        if (size() == 0){
+        if (_heap.size() == 0){
             return null;
         }
-        Prioritized[] array = getAsArray();
-        Prioritized max = array[0];
 
-        for (int i = 0; i < array.length; i++){
-            if (array[i].compareTo(max) > 0){
-                max = array[i];
-            }
-        }
-        return (V) max.getValue();
+        return _heap.get(0).getValue();
     }
 
     // TODO (part 2B) : updatePriority
     public void updatePriority(V value, P newPriority) {
+        // O(N) to search for value
+        int index = findIndex(value);
+        if (index == -1){
+            return;
+        }
+
+        Patient newNode = new Patient(_heap.get(index).getValue(), newPriority);
+        _heap.set(index, newNode);
+
+        // only will execute code in one of the two and thus will be O(logN)
+        bubbleUp(index);
+        bubbleDown(index);
+
     }
+
+    public int findIndex(V value){
+        for (int i = 0; i < _heap.size(); i++){
+            if (value == _heap.get(i).getValue()){
+                return i;
+            }
+        }
+        return -1;
+    }
+
 
     /**
      * Constructor that builds a heap given an initial array of hospital.Prioritized objects.
      */
     // TODO (Task 3): overloaded constructor
     public MaxBinHeapER(Prioritized<V, P>[] initialEntries ) {
+        _heap = new ArrayList<>();
+        for (int i = 0; i < initialEntries.length; i++){
+            Prioritized<V, P> entry = initialEntries[i];
+            _heap.add(entry);
+            bubbleUp(size() - 1);
+
+        }
     }
 
 

@@ -7,20 +7,14 @@ import assn05.Patient;
 public class Main {
 
     public static void main(String[] args) {
-        MaxBinHeapER room = new MaxBinHeapER();
-        room.enqueue(1);
-        room.enqueue(1);
-
-        room.enqueue(1);
-        room.enqueue(1);
-        room.enqueue(6);
-        room.enqueue(5);
 
 //        testP1(room);
-        testP2(room);
-  //      room.dequeue();
-        testP3(room);
-        testP4(room);
+//        testP2(room);
+//        room.updatePriority(10, 99);
+//        room.dequeue();
+//        testP3(room);
+//        testP6();
+          compareRuntimes();
     }
 
     // test Part 1
@@ -74,6 +68,27 @@ public class Main {
         System.out.println(heap.getMax());
 
     }
+    public static void testP5(MaxBinHeapER heap) {
+        System.out.println("Size: "+heap.size());
+
+        Prioritized[] array = heap.getAsArray();
+        for (int i = 0; i < heap.size(); i++){
+            if (array[i] == null){
+                return;
+            }
+            System.out.println("Value: "+array[i].getValue()+" Priority: "+array[i].getPriority());
+        }
+
+    }
+
+    public static void testP6() {
+        MaxBinHeapER transfer = new MaxBinHeapER(makePatients());
+        Prioritized[] arr = transfer.getAsArray();
+        for(int i = 0; i < transfer.size(); i++) {
+            System.out.println("Value: " + arr[i].getValue()
+                    + ", Priority: " + arr[i].getPriority());
+        }
+    }
 
     public static void fillER(MaxBinHeapER complexER) {
         for(int i = 0; i < 100000; i++) {
@@ -102,12 +117,30 @@ public class Main {
         fillER(simplePQ);
 
         // Code for (Task 4.1) Here
+        double t1 = System.nanoTime();
+        for (int i = 0; i < simplePQ.size(); i++){
+            simplePQ.dequeue();
+        }
+        double t2 = System.nanoTime();
+        double total = t2 - t1;
+        double average = (total) / simplePQ.size();
+        results[0] = total;
+        results[1] = average;
 
 
         MaxBinHeapER binHeap = new MaxBinHeapER();
         fillER(binHeap);
 
         // Code for (Task 4.2) Here
+        double t3 = System.nanoTime();
+        for (int i = 0; i < binHeap.size(); i++){
+            binHeap.dequeue();
+        }
+        double t4 = System.nanoTime();
+        double totalHeap = t4 - t3;
+        double averageHeap = (totalHeap) / binHeap.size();
+        results[2] = totalHeap;
+        results[3] = averageHeap;
 
         return results;
     }
